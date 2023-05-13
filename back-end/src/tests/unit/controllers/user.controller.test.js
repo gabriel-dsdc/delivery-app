@@ -2,7 +2,7 @@ const { expect } = require('chai');
 const sinon = require('sinon');
 const { userController } = require('../../../database/controllers');
 const { users } = require('../../../database/services');
-const { userMock, newUserBody, userBody, sellersList } = require('../../mocks/user.mock');
+const { userMock, newUserBody, userBody, sellersList, usersList } = require('../../mocks/user.mock');
 
 describe('User camada controller', function () {
   let req = {};
@@ -88,6 +88,27 @@ describe('User camada controller', function () {
     // Assert
     expect((res.status).calledWith(200)).to.equal(true);
     expect((res.json).calledWith(sellersList)).to.equal(true);
+  });
+
+  it('getAll', async function () {
+    // Arrange
+    sinon.stub(users, 'getAll').resolves(usersList);
+    // Act
+    await userController.getAll(req, res);
+    // Assert
+    expect((res.status).calledWith(200)).to.equal(true);
+    expect((res.json).calledWith(usersList)).to.equal(true);
+  });
+
+  it('deleteByEmail', async function () {
+    // Arrange
+    req.body = userBody;
+    sinon.stub(users, 'deleteByEmail').resolves(1);
+    // Act
+    await userController.deleteByEmail(req, res);
+    // Assert
+    expect((res.status).calledWith(200)).to.equal(true);
+    expect((res.json).calledWith(1)).to.equal(true);
   });
 
   afterEach(sinon.restore);

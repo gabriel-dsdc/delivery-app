@@ -16,9 +16,8 @@ function AdminPage() {
       const info = await getAllUsers();
       setUsers(info);
     };
-
     requisition();
-  });
+  }, []);
 
   const isDisabled = () => {
     const regex = /\S+@\S+\.\S+/i;
@@ -33,6 +32,8 @@ function AdminPage() {
     const result = await registerSubmit(body);
     if (!result) {
       setInvalid(true);
+    } else {
+      setUsers(await getAllUsers());
     }
   };
 
@@ -51,9 +52,9 @@ function AdminPage() {
         <h2>Cadastrar novo usuário</h2>
         {
           invalid && (
-            <spam data-testid="admin_manage__element-invalid-register">
+            <span data-testid="admin_manage__element-invalid-register">
               Já existe um usuário usando esse endereço de email
-            </spam>
+            </span>
           )
         }
         <input
